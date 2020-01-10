@@ -22,8 +22,11 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
     protected BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
     protected DcMotor leftFront, leftRear, rightFront, rightRear; // wheels
-    protected DcMotor lifterTop, lifterBottom, actuatorHorizontal, actuatorVertical; // arm
+    protected DcMotor lifterTop;
+    protected DcMotor lifterBottom;
+    protected DcMotor actuatorVertical; // arm
     protected Servo foundationGrabberLeft, foundationGrabberRight, clamp, spin;
+    final double COUNTS_PER_INCH = 307.699557;
 
     protected BNO055IMU imu;
     protected ColorSensor colorSensor1, colorSensor2;
@@ -39,12 +42,12 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         while (calibrateIMU && !isStopRequested() && !imu.isGyroCalibrated()) {
-            telemetry.addData("Mode", "Calibrating imu...");
+            telemetry.addData("Status", "Calibrating imu...");
             telemetry.update();
             sleep(50);
             idle();
         }
-        telemetry.addData("Mode", "Initializing hardware devices");
+        telemetry.addData("Status", "Initializing hardware devices");
         telemetry.update();
 
 
@@ -62,7 +65,6 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         lifterTop = hardwareMap.get(DcMotor.class, "lifterTop");
         lifterBottom = hardwareMap.get(DcMotor.class, "lifterBottom");
 
-        actuatorHorizontal = hardwareMap.get(DcMotor.class, "actuatorHorizontal");
         actuatorVertical = hardwareMap.get(DcMotor.class, "actuatorVertical");
 
 
@@ -71,8 +73,8 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
 
-        lifterTop.setDirection(DcMotorSimple.Direction.REVERSE);
-        lifterBottom.setDirection(DcMotorSimple.Direction.FORWARD);
+        lifterTop.setDirection(DcMotorSimple.Direction.FORWARD);
+        lifterBottom.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         downStop.setMode(DigitalChannel.Mode.INPUT);
@@ -88,9 +90,8 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         lifterBottom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         actuatorVertical.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        actuatorHorizontal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        telemetry.addData("Mode", "Setting motors power");
+        telemetry.addData("Status", "Setting motors power");
         telemetry.update();
 
         // Set all motors to zero power
@@ -102,23 +103,25 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         lifterTop.setPower(0);
         lifterBottom.setPower(0);
 
-        actuatorHorizontal.setPower(0);
         actuatorVertical.setPower(0);
 
-        foundationGrabberLeft = hardwareMap.get(Servo.class, "foundationGrabber");
-        foundationGrabberRight = hardwareMap.get(Servo.class, "foundationGrabber");
+        foundationGrabberLeft = hardwareMap.get(Servo.class, "foundationGrabberLeft");
+        foundationGrabberRight = hardwareMap.get(Servo.class, "foundationGrabberRight");
         foundationGrabberLeft.setPosition(0.0);
-        foundationGrabberRight.setPosition(0.0);
+        foundationGrabberRight.setPosition(1.0);
+
         clamp = hardwareMap.get(Servo.class, "clamp");
-        clamp.setPosition(1.0);
+        clamp.setPosition(0.48);
         spin = hardwareMap.get(Servo.class, "spin");
-        spin.setPosition(0.45);
+        spin.setPosition(0.0);
 
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
 
-        telemetry.addData("Mode", "Done initializing");
+        telemetry.addData("Status", "Done initializing");
         telemetry.update();
     }
+
+
 
 }
