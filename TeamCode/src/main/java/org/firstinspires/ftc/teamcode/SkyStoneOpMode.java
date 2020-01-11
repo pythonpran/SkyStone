@@ -22,11 +22,9 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
     protected BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
     protected DcMotor leftFront, leftRear, rightFront, rightRear; // wheels
-    protected DcMotor lifterTop;
-    protected DcMotor lifterBottom;
-    protected DcMotor actuatorVertical; // arm
+    protected DcMotor lifterTop, lifterBottom, actuatorVertical; // arm
     protected Servo foundationGrabberLeft, foundationGrabberRight, clamp, spin;
-    final double COUNTS_PER_INCH = 307.699557;
+    final double COUNTS_PER_INCH = 23.9;
 
     protected BNO055IMU imu;
     protected ColorSensor colorSensor1, colorSensor2;
@@ -76,8 +74,14 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         lifterTop.setDirection(DcMotorSimple.Direction.FORWARD);
         lifterBottom.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        actuatorVertical.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        actuatorVertical.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        actuatorVertical.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         downStop.setMode(DigitalChannel.Mode.INPUT);
+
+        resetEncoders();
 
 
         //Set to brake mode
@@ -122,6 +126,23 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         telemetry.update();
     }
 
+    protected void brake() {
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+    }
 
 
+    protected void resetEncoders() {
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }
