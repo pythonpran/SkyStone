@@ -16,5 +16,4 @@ dependencies {
      */
     implementation project(':FtcRobotController')
     implementation 'org.openftc:easyopencv:1.3.2'
-    implementation 'com.acmerobotics.roadrunner:core:0.4.7'
 }
