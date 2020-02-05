@@ -90,21 +90,21 @@ public class VisionDatasetsChecker
                 /*
                  * Velocity Vortex
                  */
-                "/sdcard/FIRST/FTC_2016-17.dat",
-                "/sdcard/FIRST/FTC_2016-17.xml",
+//                "/sdcard/FIRST/FTC_2016-17.dat",
+//                "/sdcard/FIRST/FTC_2016-17.xml",
 
                 /*
                  * Relic Recovery
                  */
-                "/sdcard/FIRST/RelicVuMark.dat",
-                "/sdcard/FIRST/RelicVuMark.xml",
+//                "/sdcard/FIRST/RelicVuMark.dat",
+//                "/sdcard/FIRST/RelicVuMark.xml",
 
                 /*
                  * Rover Ruckus
                  */
-                "/sdcard/FIRST/RoverRuckus.dat",
-                "/sdcard/FIRST/RoverRuckus.xml",
-                "/sdcard/FIRST/RoverRuckus.tflite",
+//                "/sdcard/FIRST/RoverRuckus.dat",
+//                "/sdcard/FIRST/RoverRuckus.xml",
+//                "/sdcard/FIRST/RoverRuckus.tflite",
 
                 /*
                  * SkyStone
