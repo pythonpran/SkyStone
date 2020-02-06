@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
+
+import org.firstinspires.ftc.teamcode.SkyStoneOpMode;
 
 public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
     @Override

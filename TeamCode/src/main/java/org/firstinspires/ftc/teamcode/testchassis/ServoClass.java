@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Autonomous
+//@Autonomous
 public class ServoClass extends TestChassisOpMode {
 
     boolean lastAState1 = false;

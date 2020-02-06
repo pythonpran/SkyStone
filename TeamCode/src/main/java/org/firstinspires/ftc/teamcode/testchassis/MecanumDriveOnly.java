@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@TeleOp
+//@TeleOp
 public class MecanumDriveOnly extends TestChassisOpMode {
 
     private boolean slowMode = false, accelerating = false;
