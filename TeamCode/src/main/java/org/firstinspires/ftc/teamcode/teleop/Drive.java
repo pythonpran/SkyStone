@@ -79,24 +79,24 @@ public class Drive extends SkyStoneOpMode {
                 leftFront.setPower(-acceleratePower);
             }
 
-            if (downStop.getState()) { //is not pressed
-                if (lifterPower == 0) {
-                    lifterPower = 0.15;
-                }
-                if (lifterPower < 0) {
-                    lifterPower /= 5;
-                }
-                lifterTop.setPower(lifterPower);
-                lifterBottom.setPower(lifterPower);
-            } else if (!downStop.getState()) { //is pressed
-                lifterPower = lifterPower < 0 ? 0 : lifterPower; // if lifterPower < 0 set it to 0
+//            if (downStop.getState()) { //is not pressed
+//                if (lifterPower == 0) {
+//                    lifterPower = 0.15;
+//                }
+//                if (lifterPower < 0) {
+//                    lifterPower /= 5;
+//                }
+//                lifterLeft.setPower(lifterPower);
+//                lifterRight.setPower(lifterPower);
+//            } else if (!downStop.getState()) { //is pressed
+//                lifterPower = lifterPower < 0 ? 0 : lifterPower; // if lifterPower < 0 set it to 0
+//
+//
+//                lifterLeft.setPower(lifterPower);
+//                lifterRight.setPower(lifterPower);
+//            }
 
-
-                lifterTop.setPower(lifterPower);
-                lifterBottom.setPower(lifterPower);
-            }
-
-            actuatorVertical.setPower(gamepad2.left_stick_y);
+            actuator.setPower(gamepad2.left_stick_y);
 
             if (gamepad1.a && !lastAState1) {
                 slowMode = !slowMode;
@@ -131,9 +131,9 @@ public class Drive extends SkyStoneOpMode {
         telemetry.addLine().addData("leftRear", () -> round(leftRear.getPower()));
         telemetry.addLine().addData("rightFront", () -> round(rightFront.getPower()));
         telemetry.addLine().addData("rightRear", () -> round(rightRear.getPower()));
-        telemetry.addLine().addData("lifter Top", () -> round(lifterTop.getPower()));
-        telemetry.addLine().addData("lifterBottom", () -> round(lifterBottom.getPower()));
-        telemetry.addLine().addData("actuatorVertical", () -> round(actuatorVertical.getPower()));
+        telemetry.addLine().addData("lifter Top", () -> round(lifterLeft.getPower()));
+        telemetry.addLine().addData("lifterRight", () -> round(lifterRight.getPower()));
+        telemetry.addLine().addData("actuator", () -> round(actuator.getPower()));
         telemetry.addLine().addData("foundationGrabberLeft", () -> foundationGrabberLeft.getPosition());
         telemetry.addLine().addData("foundationGrabberRight", () -> foundationGrabberRight.getPosition());
         telemetry.addLine().addData("clamp", () -> round(clamp.getPosition(), 6));
