@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SkyStoneOpMode;
@@ -8,23 +9,25 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @TeleOp
+@Config
 public class Drive extends SkyStoneOpMode {
 
     private boolean slowMode = false, accelerating = false;
     private double acceleratePower = 0.0;
+    public static double stallPower = 0.02;
 
     @Override
     public void runOpMode() {
         initialize(false);
         boolean lastDPLeftState = false;
         boolean lastAState1 = false;
-        boolean lastBState2 = false;
+        boolean lastAState2 = false;
         boolean lastBState1 = false;
+        boolean lastBState2 = false;
         composeTelemetry();
         waitForStart();
 
         while (opModeIsActive()) {
-            double lifterPower = -gamepad2.right_stick_y;
             double x = gamepad1.left_stick_x * .9 + .1;
             double y = gamepad1.left_stick_y * .9 + .1;
             x = (x == .1) ? 0 : x;
@@ -79,22 +82,14 @@ public class Drive extends SkyStoneOpMode {
                 leftFront.setPower(-acceleratePower);
             }
 
-//            if (downStop.getState()) { //is not pressed
-//                if (lifterPower == 0) {
-//                    lifterPower = 0.15;
-//                }
-//                if (lifterPower < 0) {
-//                    lifterPower /= 5;
-//                }
-//                lifterLeft.setPower(lifterPower);
-//                lifterRight.setPower(lifterPower);
-//            } else if (!downStop.getState()) { //is pressed
-//                lifterPower = lifterPower < 0 ? 0 : lifterPower; // if lifterPower < 0 set it to 0
-//
-//
-//                lifterLeft.setPower(lifterPower);
-//                lifterRight.setPower(lifterPower);
-//            }
+            double lifterPower = gamepad2.right_stick_y;
+            if (downStop.getState() && lifterPower == 0) {
+                lifterPower = 0;
+            } else if (!downStop.getState()) {
+                lifterPower = lifterPower < 0 ? 0 : lifterPower; // if lifterPower < 0, lifterPower = 0
+            }
+            lifterLeft.setPower(lifterPower);
+            lifterRight.setPower(lifterPower);
 
             actuator.setPower(gamepad2.left_stick_y);
 
@@ -103,9 +98,12 @@ public class Drive extends SkyStoneOpMode {
             }
             lastAState1 = gamepad1.a;
 
-
+            if (gamepad2.a && !lastAState2) {
+                reach.setPosition(reach.getPosition() == 0.25 ? 0.92 : 0.25);
+            }
+            lastAState2 = gamepad2.a;
             if (gamepad1.b && !lastBState1) {
-                clamp.setPosition(!(clamp.getPosition() >= 0.07 && clamp.getPosition() <= 0.13) ? 0.1 : 0.48);
+                clamp.setPosition(clamp.getPosition() == 0.2 ? 0.52 : 0.2);
             }
             lastBState1 = gamepad1.b;
 
@@ -127,16 +125,21 @@ public class Drive extends SkyStoneOpMode {
 
 
     private void composeTelemetry() {
+        telemetry.addLine().addData("slowMode", () -> slowMode);
         telemetry.addLine().addData("leftFront", () -> round(leftFront.getPower()));
         telemetry.addLine().addData("leftRear", () -> round(leftRear.getPower()));
         telemetry.addLine().addData("rightFront", () -> round(rightFront.getPower()));
         telemetry.addLine().addData("rightRear", () -> round(rightRear.getPower()));
-        telemetry.addLine().addData("lifter Top", () -> round(lifterLeft.getPower()));
+        telemetry.addLine().addData("lifterLeft", () -> round(lifterLeft.getPower()));
         telemetry.addLine().addData("lifterRight", () -> round(lifterRight.getPower()));
         telemetry.addLine().addData("actuator", () -> round(actuator.getPower()));
+        telemetry.addLine().addData("position actuator", () -> actuator.getCurrentPosition());
         telemetry.addLine().addData("foundationGrabberLeft", () -> foundationGrabberLeft.getPosition());
         telemetry.addLine().addData("foundationGrabberRight", () -> foundationGrabberRight.getPosition());
-        telemetry.addLine().addData("clamp", () -> round(clamp.getPosition(), 6));
+        telemetry.addLine().addData("reach", () -> reach.getPosition());
+        telemetry.addLine().addData("lift", () -> lift.getPosition());
+        telemetry.addLine().addData("clamp", () -> clamp.getPosition());
+        telemetry.addLine().addData("cap", () -> cap.getPosition());
         telemetry.addLine().addData("spin", () -> spin.getPosition());
         telemetry.addLine().addData("Down Touch Sensor pressed: ", () -> !downStop.getState());
     }

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class SkyStoneOpMode extends LinearOpMode {
@@ -15,10 +16,11 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
 
     protected DcMotor leftFront, leftRear, rightFront, rightRear; // wheels
     protected DcMotor lifterLeft, lifterRight, actuator; // arm
-    protected Servo reach, lift, spin, clamp, foundationGrabberLeft, foundationGrabberRight;
+    protected Servo reach, lift, spin, clamp, cap, foundationGrabberLeft, foundationGrabberRight;
 
     protected BNO055IMU imu;
     protected ColorSensor colorSensor1, colorSensor2;
+    protected DistanceSensor distanceSensor1, distanceSensor2;
     protected DigitalChannel downStop;
 
     protected void initialize(boolean calibrateIMU) {
@@ -31,6 +33,8 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
 
         colorSensor1 = hardwareMap.get(ColorSensor.class, "colorSensor1");
         colorSensor2 = hardwareMap.get(ColorSensor.class, "colorSensor2");
+        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
+        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
         downStop = hardwareMap.get(DigitalChannel.class, "downStop");
 
 
@@ -49,6 +53,7 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         reach = hardwareMap.get(Servo.class, "reach");
         lift = hardwareMap.get(Servo.class, "lift");
         clamp = hardwareMap.get(Servo.class, "clamp");
+        cap = hardwareMap.get(Servo.class, "cap");
         spin = hardwareMap.get(Servo.class, "spin");
 
         leftRear.setDirection(DcMotor.Direction.FORWARD);
@@ -56,15 +61,13 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
 
-        lifterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        lifterRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        lifterLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        lifterRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         lifterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lifterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lifterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lifterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        actuator.setDirection(DcMotorSimple.Direction.REVERSE);
 
         actuator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         actuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -96,15 +99,18 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
 
         actuator.setPower(0);
 
-        foundationGrabberLeft.setPosition(0.0);
-        foundationGrabberRight.setPosition(1.0);
-        reach.setPosition(0.0);
-        lift.setPosition(0.0);
-        clamp.setPosition(0.48);
-        spin.setPosition(0.0);
-
+        initServoPositions();
         telemetry.addData("Status", "Done initializing");
         telemetry.update();
+    }
+
+    protected void initServoPositions() {
+        foundationGrabberLeft.setPosition(0.0);
+        foundationGrabberRight.setPosition(1.0);
+        lift.setPosition(0.58);
+        clamp.setPosition(0.55);
+        cap.setPosition(0.9);
+        spin.setPosition(0.52);
     }
 
     protected void calibrateIMU() {
