@@ -2,16 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Blocks/Blocks.iml" filepath="$PROJECT_DIR$/Blocks/Blocks.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FtcCommon/FtcCommon.iml" filepath="$PROJECT_DIR$/FtcCommon/FtcCommon.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" filepath="$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Hardware/Hardware.iml" filepath="$PROJECT_DIR$/Hardware/Hardware.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Inspection/Inspection.iml" filepath="$PROJECT_DIR$/Inspection/Inspection.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenRC/OpenRC.iml" filepath="$PROJECT_DIR$/OpenRC/OpenRC.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RobotCore/RobotCore.iml" filepath="$PROJECT_DIR$/RobotCore/RobotCore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RobotServer/RobotServer.iml" filepath="$PROJECT_DIR$/RobotServer/RobotServer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SkyStone.iml" filepath="$PROJECT_DIR$/SkyStone.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TeamCode/TeamCode.iml" filepath="$PROJECT_DIR$/TeamCode/TeamCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Blocks/Blocks.iml" filepath="$PROJECT_DIR$/Blocks/Blocks.iml" group="SkyStone/Blocks" />
+      <module fileurl="file://$PROJECT_DIR$/FtcCommon/FtcCommon.iml" filepath="$PROJECT_DIR$/FtcCommon/FtcCommon.iml" group="SkyStone/FtcCommon" />
+      <module fileurl="file://$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" filepath="$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" group="SkyStone/FtcRobotController" />
+      <module fileurl="file://$PROJECT_DIR$/Hardware/Hardware.iml" filepath="$PROJECT_DIR$/Hardware/Hardware.iml" group="SkyStone/Hardware" />
+      <module fileurl="file://$PROJECT_DIR$/Inspection/Inspection.iml" filepath="$PROJECT_DIR$/Inspection/Inspection.iml" group="SkyStone/Inspection" />
+      <module fileurl="file://$PROJECT_DIR$/OpenRC/OpenRC.iml" filepath="$PROJECT_DIR$/OpenRC/OpenRC.iml" group="SkyStone/OpenRC" />
+      <module fileurl="file://$PROJECT_DIR$/RobotCore/RobotCore.iml" filepath="$PROJECT_DIR$/RobotCore/RobotCore.iml" group="SkyStone/RobotCore" />
+      <module fileurl="file://$PROJECT_DIR$/RobotServer/RobotServer.iml" filepath="$PROJECT_DIR$/RobotServer/RobotServer.iml" group="SkyStone/RobotServer" />
+      <module fileurl="file://$PROJECT_DIR$/SkyStone.iml" filepath="$PROJECT_DIR$/SkyStone.iml" group="SkyStone" />
+      <module fileurl="file://$PROJECT_DIR$/TeamCode/TeamCode.iml" filepath="$PROJECT_DIR$/TeamCode/TeamCode.iml" group="SkyStone/TeamCode" />
     </modules>
   </component>
 </project>
