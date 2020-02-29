@@ -61,5 +61,5 @@ dependencies {
      */
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     extremeTurboApi 'com.acmerobotics.dashboard:dashboard:0.3.7'
-    extremeTurboApi 'com.acmerobotics.dashboard:dashboard:0.3.7'
+    turboApi 'com.acmerobotics.dashboard:dashboard:0.3.7'
 }
