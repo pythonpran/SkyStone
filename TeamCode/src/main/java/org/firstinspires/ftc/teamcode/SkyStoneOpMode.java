@@ -33,7 +33,7 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
 
         colorSensor1 = hardwareMap.get(ColorSensor.class, "colorSensor1");
         colorSensor2 = hardwareMap.get(ColorSensor.class, "colorSensor2");
-        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
+//        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
         distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
         downStop = hardwareMap.get(DigitalChannel.class, "downStop");
 
