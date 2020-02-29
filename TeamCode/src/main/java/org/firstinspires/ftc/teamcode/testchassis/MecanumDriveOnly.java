@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.testchassis;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -50,10 +48,10 @@ public class MecanumDriveOnly extends TestChassisOpMode {
                 if (acceleratePower < 0.5) {
                     acceleratePower += 0.001;
                 }
-                rightFront.setPower(-acceleratePower);
-                rightRear.setPower(-acceleratePower);
-                leftRear.setPower(-acceleratePower);
-                leftFront.setPower(-acceleratePower);
+                rightFront.setPower(acceleratePower);
+                rightRear.setPower(acceleratePower);
+                leftRear.setPower(acceleratePower);
+                leftFront.setPower(acceleratePower);
             }
 
             if (acceleratePower > 0 && !gamepad1.x) {

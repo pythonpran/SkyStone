@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testchassis;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class TestChassisOpMode extends LinearOpMode {
 
@@ -11,7 +10,6 @@ public abstract class TestChassisOpMode extends LinearOpMode {
 
     protected DcMotor leftRear, rightRear, leftFront, rightFront;
     protected BNO055IMU imu;
-    protected Servo clamp, spin, yah;
 
     protected void initialize() {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -36,19 +34,10 @@ public abstract class TestChassisOpMode extends LinearOpMode {
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
 
-        clamp = hardwareMap.get(Servo.class, "clamp");
-        spin = hardwareMap.get(Servo.class, "spin");
-        yah = hardwareMap.get(Servo.class, "yah");
-
-        clamp.setPosition(0);
-        spin.setPosition(1);
-        yah.setPosition(1);
-        // set clamp 0, spin 0.3, and yah 0 for cool effect
-
-        leftRear.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightRear.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-        leftFront.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightFront.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        leftRear.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        rightRear.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        leftFront.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        rightFront.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
         //Set to brake mode
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
