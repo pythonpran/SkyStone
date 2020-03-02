@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Robot type="FirstInspires-FTC">
+    <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ3MM6RV" parentModuleAddress="1">
+        <LynxModule name="Expansion Hub 1" port="1">
+            <goBILDA5202SeriesMotor name="rightFront" port="0" />
+            <goBILDA5202SeriesMotor name="rightRear" port="1" />
+            <goBILDA5202SeriesMotor name="leftFront" port="2" />
+            <goBILDA5202SeriesMotor name="leftRear" port="3" />
+            <Servo name="reach" port="1" />
+            <Servo name="lift" port="2" />
+            <Servo name="spin" port="3" />
+            <Servo name="clamp" port="4" />
+            <DigitalDevice name="downStop" port="1" />
+            <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+        </LynxModule>
+        <LynxModule name="Expansion Hub 2" port="2">
+            <goBILDA5202SeriesMotor name="lifterRight" port="0" />
+            <goBILDA5202SeriesMotor name="lifterLeft" port="1" />
+            <goBILDA5202SeriesMotor name="actuator" port="2" />
+            <Servo name="foundationGrabberLeft" port="0" />
+            <Servo name="foundationGrabberRight" port="1" />
+            <Servo name="cap" port="2" />
+            <Servo name="" port="3" />
+            <Servo name="" port="4" />
+            <Servo name="" port="5" />
+            <RevColorSensorV3 name="colorSensor1" port="0" bus="2" />
+            <RevColorSensorV3 name="colorSensor2" port="0" bus="3" />
+            <REV_VL53L0X_RANGE_SENSOR name="distanceSensor2" port="0" bus="1" />
+            <LynxEmbeddedIMU name="imu 1" port="0" bus="0" />
+        </LynxModule>
+    </LynxUsbDevice>
+</Robot>
