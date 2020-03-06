@@ -14,16 +14,20 @@ public class Drive extends SkyStoneOpMode {
 
     private boolean slowMode = false, accelerating = false;
     private double acceleratePower = 0.0;
-    public static double stallPower = 0.02;
 
     @Override
     public void runOpMode() {
         initialize(false);
+        actuator.setPower(0);
+        reach.setPosition(0.25);
+        spin.setPosition(0.2);
+        clamp.setPosition(0);
         boolean lastDPLeftState = false;
         boolean lastAState1 = false;
         boolean lastAState2 = false;
-        boolean lastBState1 = false;
+        boolean lastYState1 = false;
         boolean lastBState2 = false;
+        boolean lastXState1 = false;
         composeTelemetry();
         waitForStart();
 
@@ -48,15 +52,15 @@ public class Drive extends SkyStoneOpMode {
             }
 
             if (slowMode && !accelerating) {
-                leftFront.setPower(v1 / 2.6);
-                rightFront.setPower(v2 / 2.6);
-                leftRear.setPower(v3 / 2.6);
-                rightRear.setPower(v4 / 2.6);
+                leftFront.setPower(v1 / 2);
+                rightFront.setPower(v2 / 2);
+                leftRear.setPower(v3 / 2);
+                rightRear.setPower(v4 / 2);
             } else if (!accelerating) {
-                leftFront.setPower(v1 / 1.5);
-                rightFront.setPower(v2 / 1.5);
-                leftRear.setPower(v3 / 1.5);
-                rightRear.setPower(v4 / 1.5);
+                leftFront.setPower(v1);
+                rightFront.setPower(v2);
+                leftRear.setPower(v3);
+                rightRear.setPower(v4);
             }
 
             if (gamepad1.dpad_up) {
@@ -84,14 +88,14 @@ public class Drive extends SkyStoneOpMode {
 
             double lifterPower = gamepad2.right_stick_y;
             if (downStop.getState() && lifterPower == 0) {
-                lifterPower = 0;
+                lifterPower = -0.13;
             } else if (!downStop.getState()) {
-                lifterPower = lifterPower < 0 ? 0 : lifterPower; // if lifterPower < 0, lifterPower = 0
+                lifterPower = lifterPower > 0 ? 0 : lifterPower; // if lifterPower < 0, lifterPower = 0
             }
-            lifterLeft.setPower(lifterPower);
-            lifterRight.setPower(lifterPower);
+            lifterLeft.setPower(-lifterPower);
+            lifterRight.setPower(-lifterPower);
 
-            actuator.setPower(gamepad2.left_stick_y);
+            actuator.setPower(-gamepad2.left_stick_y);
 
             if (gamepad1.a && !lastAState1) {
                 slowMode = !slowMode;
@@ -99,21 +103,31 @@ public class Drive extends SkyStoneOpMode {
             lastAState1 = gamepad1.a;
 
             if (gamepad2.a && !lastAState2) {
-                reach.setPosition(reach.getPosition() == 0.25 ? 0.92 : 0.25);
+                lift.setPosition(round(lift.getPosition(), 2) != 0.58 ? 0.58 : 0);
             }
             lastAState2 = gamepad2.a;
-            if (gamepad1.b && !lastBState1) {
-                clamp.setPosition(clamp.getPosition() == 0.2 ? 0.52 : 0.2);
+            if (gamepad1.y && !lastYState1) {
+                clamp.setPosition(round(clamp.getPosition(), 1) != 0.6 ? 0.6 : 0.2);
             }
-            lastBState1 = gamepad1.b;
+            lastYState1 = gamepad1.y;
 
-            if (gamepad2.b && !lastBState2) {
-                spin.setPosition(!(spin.getPosition() >= 0.37 && spin.getPosition() <= 0.43) ? 0.4 : 1.0);
+            if (gamepad1.b && !lastBState2 && (round(clamp.getPosition(), 2) != 0.6)) {
+                spin.setPosition(spin.getPosition() != 0.52 ? 0.52 : 0.2);
             }
             lastBState2 = gamepad2.b;
 
+            if (gamepad1.x && !lastXState1) {
+                cap.setPosition(round(cap.getPosition(), 1) != 1.0 ? 1.0 : 0);
+            }
+            lastXState1 = gamepad1.x;
+
+
+
             if (gamepad1.dpad_left && !lastDPLeftState) {
-                // if foundationGrabber != 0.0, set it to 1.0, else set it to 0.0
+                clamp.setPosition(0);
+                lift.setPosition(0);
+                reach.setPosition(0.45);
+
                 foundationGrabberLeft.setPosition(foundationGrabberLeft.getPosition() != 0.0 ? 0.0 : 1.0);
                 foundationGrabberRight.setPosition(foundationGrabberRight.getPosition() != 0.0 ? 0.0 : 1.0);
             }
@@ -136,11 +150,11 @@ public class Drive extends SkyStoneOpMode {
         telemetry.addLine().addData("position actuator", () -> actuator.getCurrentPosition());
         telemetry.addLine().addData("foundationGrabberLeft", () -> foundationGrabberLeft.getPosition());
         telemetry.addLine().addData("foundationGrabberRight", () -> foundationGrabberRight.getPosition());
-        telemetry.addLine().addData("reach", () -> reach.getPosition());
-        telemetry.addLine().addData("lift", () -> lift.getPosition());
-        telemetry.addLine().addData("clamp", () -> clamp.getPosition());
-        telemetry.addLine().addData("cap", () -> cap.getPosition());
-        telemetry.addLine().addData("spin", () -> spin.getPosition());
+        telemetry.addLine().addData("reach", () -> round(reach.getPosition()));
+        telemetry.addLine().addData("lift", () -> round(lift.getPosition()));
+        telemetry.addLine().addData("clamp", () -> round(clamp.getPosition()));
+        telemetry.addLine().addData("cap", () -> round(cap.getPosition()));
+        telemetry.addLine().addData("spin", () -> round(spin.getPosition()));
         telemetry.addLine().addData("Down Touch Sensor pressed: ", () -> !downStop.getState());
     }
 

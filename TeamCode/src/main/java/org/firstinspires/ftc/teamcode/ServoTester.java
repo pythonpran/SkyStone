@@ -18,7 +18,7 @@ public class ServoTester extends SkyStoneOpMode {
 
     @Override
     public void runOpMode() {
-        initialize(false);
+        initializeHardwareDevices(false);
         composeTelemetry();
         while (!isStopRequested()) {
             foundationGrabberLeft.setPosition(foundationGrabberLeftPosition);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -12,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public abstract class SkyStoneOpMode extends LinearOpMode {
 
     protected static final double COUNTS_PER_INCH = 23.9;
-    protected static final double ODOMETER_COUNTS_PER_INCH = 2724 / 1.49606;
+    public static final double ODOMETER_COUNTS_PER_INCH = 2724 / 1.49606;
 
     protected DcMotor leftFront, leftRear, rightFront, rightRear; // wheels
     protected DcMotor lifterLeft, lifterRight, actuator; // arm
@@ -23,13 +24,13 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
     protected DistanceSensor distanceSensor1, distanceSensor2;
     protected DigitalChannel downStop;
 
-    protected void initialize(boolean calibrateIMU) {
-        // The IMU sensor object
+    protected void initializeHardwareDevices(boolean calibrateIMU) {
+        telemetry.addData("Status", "Initializing hardware devices");
+        telemetry.update();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         if (calibrateIMU) calibrateIMU();
         telemetry.addData("Status", "Initializing hardware devices");
         telemetry.update();
-
 
         colorSensor1 = hardwareMap.get(ColorSensor.class, "colorSensor1");
         colorSensor2 = hardwareMap.get(ColorSensor.class, "colorSensor2");
@@ -55,6 +56,13 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         clamp = hardwareMap.get(Servo.class, "clamp");
         cap = hardwareMap.get(Servo.class, "cap");
         spin = hardwareMap.get(Servo.class, "spin");
+    }
+
+    protected void initialize(boolean calibrateIMU) {
+        if (FtcDashboard.getInstance() != null && FtcDashboard.getInstance().getTelemetry() != null) {
+//            telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        }
+        initializeHardwareDevices(calibrateIMU);
 
         leftRear.setDirection(DcMotor.Direction.FORWARD);
         rightRear.setDirection(DcMotor.Direction.REVERSE);
@@ -66,8 +74,8 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
 
         lifterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lifterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lifterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lifterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lifterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lifterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         actuator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         actuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -108,8 +116,8 @@ public abstract class SkyStoneOpMode extends LinearOpMode {
         foundationGrabberLeft.setPosition(0.0);
         foundationGrabberRight.setPosition(1.0);
         lift.setPosition(0.58);
-        clamp.setPosition(0.55);
-        cap.setPosition(0.9);
+        clamp.setPosition(0.5);
+        cap.setPosition(1.0);
         spin.setPosition(0.52);
     }
 
