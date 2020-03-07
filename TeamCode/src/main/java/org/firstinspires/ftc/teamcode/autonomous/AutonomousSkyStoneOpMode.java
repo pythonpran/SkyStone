@@ -32,7 +32,7 @@ public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
     private static final float rectWidth = 1.5f / 5f;
 
     private static final float offsetX = 0f / 8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    private static final float offsetY = -3f / 16f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
+    private static final float offsetY = -2f / 16f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
     private static float[] midPos = {4f / 8f + offsetX, 4f / 8f + offsetY};
     private static float[] leftPos = {2f / 8f + offsetX, 4f / 8f + offsetY};
@@ -64,7 +64,7 @@ public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
 
 
     protected void createGlobalPositionUpdate() {
-        globalPositionUpdate = new OdometryGlobalCoordinatePosition(rightRear, leftFront, rightFront, ODOMETER_COUNTS_PER_INCH, 75, imu);
+        globalPositionUpdate = new OdometryGlobalCoordinatePosition(rightRear, leftFront, rightFront, 75, imu);
         globalPositionUpdate.reverseRightEncoder();
     }
 
@@ -86,17 +86,18 @@ public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
         ThreadPool.getDefaultScheduler().schedule(stop, time, TimeUnit.MILLISECONDS);
     }
 
-    protected void move(double x, double y, double proportionX, double proportionY, double brakeDistanceY, double brakeDistanceX, double brakeVelocity) {
+    protected void move(double x, double y, double proportionX, double proportionY, double brakeDistanceX, double brakeDistanceY, double brakeVelocity, long timeout) {
         y = -y;
         x = -x;
         double pX = proportionX / ODOMETER_COUNTS_PER_INCH;
         double pY = proportionY / ODOMETER_COUNTS_PER_INCH;
-        double pHeading = .004;
+        double pHeading = .0025;
         double targetX = -x * ODOMETER_COUNTS_PER_INCH;
         double targetY = y * ODOMETER_COUNTS_PER_INCH;
         double lastX = targetX;
         double lastY = targetY;
-        while (opModeIsActive()) {
+        long endTime = System.currentTimeMillis() + timeout;
+        while (opModeIsActive() && System.currentTimeMillis() < endTime) {
             double robotAngle = Math.atan2(targetX - globalPositionUpdate.returnXCoordinate(), targetY - globalPositionUpdate.returnYCoordinate()) + Math.PI / 4;
             // double rightX=pHeading*(globalPositionUpdate.returnOrientation());
             double rightX = pHeading * (globalPositionUpdate.returnOrientation());
@@ -115,7 +116,6 @@ public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
             double v4 = (Math.cos(robotAngle));
             double kY = Math.abs(targetY - globalPositionUpdate.returnYCoordinate()) * pY;
             double kX = Math.abs(targetX - globalPositionUpdate.returnXCoordinate()) * pX;
-
             //if statement for controlling overshoot
             if (Math.abs((targetY - globalPositionUpdate.returnYCoordinate()) / ODOMETER_COUNTS_PER_INCH) < brakeDistanceY && Math.abs(vY) > brakeVelocity) {
                 v1 = 0;
@@ -129,10 +129,10 @@ public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
                 v3 = 0;
                 v4 = 0;
             }
-            kY = Math.max(.17, kY);
+            kY = Math.max(.2, kY);
             kY = Math.min(1, kY);
 
-            kX = Math.max(.3, kX);
+            kX = Math.max(.33, kX);
             kX = Math.min(1, kX);
             if (Math.abs((targetX - globalPositionUpdate.returnXCoordinate()) / ODOMETER_COUNTS_PER_INCH) < .3 && Math.abs((targetY - globalPositionUpdate.returnYCoordinate()) / ODOMETER_COUNTS_PER_INCH) < .5) {
                 brake();
@@ -149,17 +149,49 @@ public abstract class AutonomousSkyStoneOpMode extends SkyStoneOpMode {
             telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate() / ODOMETER_COUNTS_PER_INCH);
             telemetry.addData("Y Position", globalPositionUpdate.returnYCoordinate() / ODOMETER_COUNTS_PER_INCH);
             telemetry.addData("robot angle", globalPositionUpdate.returnOrientation());
-            telemetry.addData("currentVY", vY);
-            telemetry.addData("xError", (targetX - globalPositionUpdate.returnXCoordinate()) / COUNTS_PER_INCH);
-            telemetry.addData("yError", (targetY - globalPositionUpdate.returnYCoordinate()) / COUNTS_PER_INCH);
+            telemetry.addData("xError", (targetX - globalPositionUpdate.returnXCoordinate()) / ODOMETER_COUNTS_PER_INCH);
+            telemetry.addData("yError", (targetY - globalPositionUpdate.returnYCoordinate()) / ODOMETER_COUNTS_PER_INCH);
 
-
-            telemetry.addData("Vertical left encoder position", rightRear.getCurrentPosition());
-            telemetry.addData("Vertical right encoder position", leftFront.getCurrentPosition());
-            telemetry.addData("horizontal encoder position", rightFront.getCurrentPosition());
             telemetry.addData("Angle", Math.toDegrees(robotAngle));
             lastX = globalPositionUpdate.returnXCoordinate();
             lastY = globalPositionUpdate.returnYCoordinate();
+            globalPositionUpdate.globalCoordinatePositionUpdate();
+
+            telemetry.update();
+        }
+        brake();
+    }
+
+    protected void turn(double targetAngle) {
+        double pHeading = .01111;
+        while (opModeIsActive()) {
+            // double rightX=pHeading*(globalPositionUpdate.returnOrientation());
+            double leftTurnPower = Math.abs(pHeading * (targetAngle - globalPositionUpdate.returnOrientation()));
+            double rightTurnPower = Math.abs(pHeading * (targetAngle - globalPositionUpdate.returnOrientation()));
+
+            leftTurnPower = Math.max(0.25, leftTurnPower);
+            leftTurnPower = Math.min(1.0, leftTurnPower);
+            rightTurnPower = Math.max(0.25, rightTurnPower);
+            rightTurnPower = Math.min(1.0, rightTurnPower);
+
+            if (globalPositionUpdate.returnOrientation() < targetAngle) {
+                leftFront.setPower(-leftTurnPower);
+                rightFront.setPower(rightTurnPower);
+                leftRear.setPower(-leftTurnPower);
+                rightRear.setPower(rightTurnPower);
+            } else {
+                leftFront.setPower(leftTurnPower);
+                rightFront.setPower(-rightTurnPower);
+                leftRear.setPower(leftTurnPower);
+                rightRear.setPower(-rightTurnPower);
+            }
+
+            if (globalPositionUpdate.returnOrientation() < targetAngle + 0.5 && globalPositionUpdate.returnOrientation() > targetAngle - 0.5) {
+                brake();
+                break;
+            }
+            telemetry.addData("heading: ", globalPositionUpdate.returnOrientation());
+
             globalPositionUpdate.globalCoordinatePositionUpdate();
 
             telemetry.update();
