@@ -9,16 +9,16 @@ import java.util.Locale;
 
 @Autonomous
 @Config
-public class AutonomousBlue extends AutonomousSkyStoneOpMode {
+public class AutonomousRed extends AutonomousSkyStoneOpMode {
 
     public static double forward = 25;
-    public static double leftX = -8;
-    public static double midX = 2;
-    public static double rightX = 8;
+    public static double leftX = -2;
+    public static double midX = 5;
+    public static double rightX = 12;
 
-    public static double leftXCycle2 = 14;
-    public static double midXCycle2 = 23;
-    public static double rightXCycle2 = 29;
+    public static double leftXCycle2 = -24;
+    public static double midXCycle2 = -16;
+    public static double rightXCycle2 = -8; //change later
 
     public static double pY = 0.3;
     public static double pX = 0.2;
@@ -26,9 +26,9 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
     public static double brakeDistanceX = 10;
     public static double brakeVelocity = 0.3;
 
-    public static double buildingZoneX = -75;
-    public static double foundationY = 35;
-    public static double buildingZoneY = 21;
+    public static double buildingZoneX = 75;
+    public static double foundationY = 30;
+    public static double buildingZoneY = 23;
 
     @Override
     public void runOpMode() {
@@ -42,8 +42,9 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
         // synchronously move the actuator
         actuatormove(1, 600, () -> {
             actuator.setPower(0);
-            reach.setPosition(0.25);
-            spin.setPosition(0.2);
+            reach.setPosition(0.91);
+            sleep(700);
+            spin.setPosition(0.87);
             sleep(1000);
             clamp.setPosition(0);
             System.err.println("actuator move");
@@ -77,7 +78,7 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
 
         clamp.setPosition(0.6); // grab block
         sleep(1000);
-        lift.setPosition(0);
+        lift.setPosition(1);
         sleep(1500);
         actuatormove(-1, 500);
         move(skyStoneXPosition, buildingZoneY, pX, pY, brakeDistanceX, 10, brakeVelocity, 10000); // move backward
@@ -94,7 +95,7 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
         // Second Skystone ------------------------------------------
         if (skyStoneLocation == SkyStoneLocation.LEFT) {
             move(leftXCycle2, buildingZoneY, pX, pY, brakeDistanceX, 10, brakeVelocity, 5000);
-            move(leftXCycle2, forward + 8, pX, 0.1, brakeDistanceX, brakeDistanceY, brakeVelocity, 2000);
+            move(leftXCycle2, forward + 14, pX, 0.1, brakeDistanceX, brakeDistanceY, brakeVelocity, 2000);
         } else if (skyStoneLocation == SkyStoneLocation.MIDDLE) {
             move(midXCycle2, buildingZoneY, pX, pY, brakeDistanceX, 10, brakeVelocity, 5000);
             move(midXCycle2, forward + 11, pX, 0.1, brakeDistanceX, brakeDistanceY, brakeVelocity, 2000);
@@ -107,14 +108,14 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
         sleep(500);
         clamp.setPosition(0.6);
         sleep(1000);
-        lift.setPosition(0);
+        lift.setPosition(1);
         sleep(1500);
 
-        move(leftX, buildingZoneY, pX, pY,
+        move(rightX, buildingZoneY, pX, pY,
                 brakeDistanceX, 10, brakeVelocity, 1000); // move backward
 
-        move(buildingZoneX, buildingZoneY, 0.4, pY, 5, brakeDistanceY, brakeVelocity, 6500); // move to building zone
-        move(buildingZoneX, foundationY + 15, pX, 0.2, 5, brakeDistanceY, brakeVelocity, 4500); // move to foundation
+        move(buildingZoneX, buildingZoneY + 19, 0.4, pY, 5, brakeDistanceY, brakeVelocity, 6000); // move to building zone
+        move(buildingZoneX, foundationY + 17, pX, 0.2, 5, brakeDistanceY, brakeVelocity, 2500); // move to foundation
 
         clamp.setPosition(0);//drops block
         lift.setPosition(0.58);
@@ -122,7 +123,7 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
         sleep(1000);
 
         reach.setPosition(0.45);
-        sleep(500);
+        sleep(1000);
 
         foundationGrabberLeft.setPosition(1.0);
         foundationGrabberRight.setPosition(0.0);
@@ -132,7 +133,7 @@ public class AutonomousBlue extends AutonomousSkyStoneOpMode {
         foundationGrabberLeft.setPosition(0.0);
         foundationGrabberRight.setPosition(1.0);
         sleep(100);
-        move(-30, 5, 0.6, 0.6, 5, brakeDistanceY, brakeVelocity, 4000); // side drive away from foundation
+        move(30, 10, 0.6, 0.6, 5, brakeDistanceY, brakeVelocity, 30000); // side drive away from foundation
 
 
 //        telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate() / ODOMETER_COUNTS_PER_INCH);
