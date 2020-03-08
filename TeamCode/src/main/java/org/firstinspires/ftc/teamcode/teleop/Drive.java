@@ -23,6 +23,7 @@ public class Drive extends SkyStoneOpMode {
         spin.setPosition(0.2);
         clamp.setPosition(0);
         boolean lastDPLeftState = false;
+        boolean lastDPRightState = false;
         boolean lastAState1 = false;
         boolean lastAState2 = false;
         boolean lastYState1 = false;
@@ -88,7 +89,7 @@ public class Drive extends SkyStoneOpMode {
 
             double lifterPower = gamepad2.right_stick_y;
             if (downStop.getState() && lifterPower == 0) {
-                lifterPower = -0.13;
+                lifterPower = -0.13; // stall power
             } else if (!downStop.getState()) {
                 lifterPower = lifterPower > 0 ? 0 : lifterPower; // if lifterPower < 0, lifterPower = 0
             }
@@ -121,17 +122,23 @@ public class Drive extends SkyStoneOpMode {
             }
             lastXState1 = gamepad1.x;
 
-
-
             if (gamepad1.dpad_left && !lastDPLeftState) {
                 clamp.setPosition(0);
                 lift.setPosition(0);
                 reach.setPosition(0.45);
 
-                foundationGrabberLeft.setPosition(foundationGrabberLeft.getPosition() != 0.0 ? 0.0 : 1.0);
-                foundationGrabberRight.setPosition(foundationGrabberRight.getPosition() != 0.0 ? 0.0 : 1.0);
+                foundationGrabberLeft.setPosition(1.0);
+                foundationGrabberRight.setPosition(0.0);
             }
             lastDPLeftState = gamepad1.dpad_left;
+
+            if (gamepad1.dpad_right && !lastDPRightState) {
+                initServoPositions();
+                reach.setPosition(0.25);
+                spin.setPosition(0.2);
+                clamp.setPosition(0);
+            }
+            lastDPRightState = gamepad1.dpad_right;
 
             telemetry.update();
         }
