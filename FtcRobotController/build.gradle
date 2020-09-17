@@ -60,7 +60,7 @@ dependencies {
      * External
      */
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    extremeTurboApi 'com.acmerobotics.dashboard:dashboard:0.3.7'
+    extremeTurboApi 'com.acmerobotics.dashboard:dashboard:0.3.10'
     turboApi 'com.acmerobotics.dashboard:dashboard:0.3.7'
     stockApi 'com.acmerobotics.dashboard:dashboard:0.3.7'
 }
