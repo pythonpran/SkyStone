@@ -40,7 +40,7 @@ dependencies {
 
     stockApi 'org.openftc:ftccommon-stock:5.3'
     stockApi 'org.openftc:robotcore-stock:5.3'
-    stockApi 'org.openftc:inspection-stock:5.3'
+    stockApi 'org.openftc:inspection-stock:5.4'
     stockApi 'org.openftc:blocks-stock:5.3'
     stockApi 'org.openftc:hardware-stock:5.3'
     stockApi 'org.openftc:onbotjava-stock:5.3'
